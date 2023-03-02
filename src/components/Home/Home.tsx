@@ -79,20 +79,19 @@ const Home: React.FC<Props> = () => {
         }
         return null;
     }
-
-    let status;
-    if (calculateWinner(current.squares)) {
-        status = `Winner: ${calculateWinner(current.squares)}`;
-    } else if (current.squares.every((square) => square !== null)) {
-        status = 'Tie game!';
-    } else {
+            let status;
+      if (calculateWinner(current.squares)) {
+            status = `Winner: ${calculateWinner(current.squares)}`;
+      } else if (current.squares.every((square) => square !== null)) {
+            status = 'Tie game!';
+      } else {
         status = `Next player: ${xIsNext ? 'X' : 'O'}`;
     }
 
     return (
         <>
-            <h1>Tic-Tac-Toe</h1>
-            <p><em>Mohammed & Keitron collaboration</em></p>
+            <h1 className="title">Tic-Tac-Toe</h1>
+            <p className="title"><em>The eternal stuggle never ends...</em></p>
             <div className="game">
                 <div className="game-board">
                     <Board squares={current.squares} onClick={handleClick} />
@@ -107,6 +106,7 @@ const Home: React.FC<Props> = () => {
                     </div>
                 </div>
             </div>
+            <p className="title">By Mohammed & Keitron</p>
         </>
     );
 }
