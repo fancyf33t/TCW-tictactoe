@@ -7,52 +7,44 @@ type Props = {};
 
 const Home: React.FC<Props> = () => {
     const [history, setHistory] = useState<Array<{ squares: Array<string | null> }>>([
-    { squares: Array(9).fill(null) },
-  ]);
-  const [stepNumber, setStepNumber] = useState<number>(0);
-  const [xIsNext, setXIsNext] = useState<boolean>(true);
-  const [xScore, setXScore] = useState<number>(0);
-  const [oScore, setOScore] = useState<number>(0);
-  const [round, setRound] = useState<number>(1);
+        { squares: Array(9).fill(null) },]);
+    const [stepNumber, setStepNumber] = useState<number>(0);
+    const [xIsNext, setXIsNext] = useState<boolean>(true);
+    const [xScore, setXScore] = useState<number>(0);
+    const [oScore, setOScore] = useState<number>(0);
+    const [round, setRound] = useState<number>(1);
 
-  const current = history[stepNumber];
-  const winner = calculateWinner(current.squares);
+    const current = history[stepNumber];
+    const winner = calculateWinner(current.squares);
 
-  const handleClick = (i: number) => {
-    const newHistory = history.slice(0, stepNumber + 1);
-    const squares = [...current.squares];
+    const handleClick = (i: number) => {
+        const newHistory = history.slice(0, stepNumber + 1);
+        const squares = [...current.squares];
 
-    if (winner || squares[i]) {
-      return;
-    }
+        if (winner || squares[i]) {
+            return;
+        }
 
-    squares[i] = xIsNext ? 'X' : 'O';
+        squares[i] = xIsNext ? 'X' : 'O';
 
-    setHistory([...newHistory, { squares }]);
-    setStepNumber(newHistory.length);
-    setXIsNext(!xIsNext);
-  };
-  const jumpTo = (step: number) => {
-    setStepNumber(step);
-    setXIsNext(step % 2 === 0);
-  };
-  const resetGame = () => {
-    setHistory([{ squares: Array(9).fill(null) }]);
-    setStepNumber(0);
-    setXIsNext(true);
-    setXScore(0);
-    setOScore(0);
-    setRound(1);
-  };
+        setHistory([...newHistory, { squares }]);
+        setStepNumber(newHistory.length);
+        setXIsNext(!xIsNext);
+    };
+    const jumpTo = (step: number) => {
+        setStepNumber(step);
+        setXIsNext(step % 2 === 0);
+    };
+    const resetGame = () => {
+        setHistory([{ squares: Array(9).fill(null) }]);
+        setStepNumber(0);
+        setXIsNext(true);
+        setXScore(0);
+        setOScore(0);
+        setRound(1);
+    };
 
-      const resetGame = () => {
-    setHistory([{ squares: Array(9).fill(null) }]);
-    setStepNumber(0);
-    setXIsNext(true);
-    setXScore(0);
-    setOScore(0);
-    setRound(1);
-  };
+
 
     function calculateWinner(squares: Array<string | null>): string | null {
         const lines = [
@@ -76,21 +68,40 @@ const Home: React.FC<Props> = () => {
 
     let status;
     if (winner) {
+        if (winner === 'X') {
+            setXScore((xScore) => xScore + 1);
+        } else if (winner === 'O') {
+            setOScore((oScore) => oScore + 1);
+        }
+        setRound((round) => round + 1);
         status = `Winner: ${winner}`;
+    } else if (current.squares.every((square) => square !== null)) {
+        setRound((round) => round + 1);
+        status = 'Tie game!';
     } else {
         status = `Next player: ${xIsNext ? 'X' : 'O'}`;
     }
 
     return (
-        <div>
-            <h1>Home Page</h1>
-            {/* placing a board component */}
-            <section className="board-section">
+        <>
+        <h1>Tic-Tac-Toe</h1>
+        <p><em>Mohammed & Keitron collaboration</em></p>
+        <div className="game">
+            <div className="game-board">
                 <Board squares={current.squares} onClick={handleClick} />
-            </section>
-            <section className="score-section"></section>
+            </div>
+            <div className="game-info">
+                <div>{status}</div>
+                <div>
+                    <button onClick={resetGame}>Reset</button>
+                </div>
+                <div>
+                    Round: {round} | Player X Score: {xScore} | Player O Score: {oScore}
+                </div>
+            </div>
         </div>
-    )
+        </>
+    );
 }
 
 export default Home;

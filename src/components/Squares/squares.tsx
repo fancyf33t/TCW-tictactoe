@@ -1,4 +1,5 @@
 import React from 'react';
+import './Squares.css';
 
 type SquareProps = {
     value: string | null;
