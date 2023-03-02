@@ -15,26 +15,34 @@ const Home: React.FC<Props> = () => {
     const [round, setRound] = useState<number>(1);
 
     const current = history[stepNumber];
-    const winner = calculateWinner(current.squares);
 
     const handleClick = (i: number) => {
-        const newHistory = history.slice(0, stepNumber + 1);
-        const squares = [...current.squares];
+            const newHistory = history.slice(0, stepNumber + 1);
+            const squares = [...current.squares];
 
-        if (winner || squares[i]) {
-            return;
-        }
+            if (calculateWinner(squares) || squares[i]) {
+              return;
+            }
 
-        squares[i] = xIsNext ? 'X' : 'O';
+            squares[i] = xIsNext ? 'X' : 'O';
 
-        setHistory([...newHistory, { squares }]);
-        setStepNumber(newHistory.length);
-        setXIsNext(!xIsNext);
-    };
-    const jumpTo = (step: number) => {
-        setStepNumber(step);
-        setXIsNext(step % 2 === 0);
-    };
+            const newWinner = calculateWinner(squares);
+
+            setHistory([...newHistory, { squares }]);
+            setStepNumber(newHistory.length);
+            setXIsNext(!xIsNext);
+
+            if (newWinner) {
+              if (newWinner === 'X') {
+                    setXScore((xScore) => xScore + 1);
+              } else if (newWinner === 'O') {
+                    setOScore((oScore) => oScore + 1);
+              }
+              setRound((round) => round + 1);
+            } else if (squares.every((square) => square !== null)) {
+              setRound((round) => round + 1);
+            }
+      };
     const resetGame = () => {
         setHistory([{ squares: Array(9).fill(null) }]);
         setStepNumber(0);
@@ -67,16 +75,9 @@ const Home: React.FC<Props> = () => {
     }
 
     let status;
-    if (winner) {
-        if (winner === 'X') {
-            setXScore((xScore) => xScore + 1);
-        } else if (winner === 'O') {
-            setOScore((oScore) => oScore + 1);
-        }
-        setRound((round) => round + 1);
-        status = `Winner: ${winner}`;
+    if (calculateWinner(current.squares)) {
+        status = `Winner: ${calculateWinner(current.squares)}`;
     } else if (current.squares.every((square) => square !== null)) {
-        setRound((round) => round + 1);
         status = 'Tie game!';
     } else {
         status = `Next player: ${xIsNext ? 'X' : 'O'}`;
@@ -84,22 +85,22 @@ const Home: React.FC<Props> = () => {
 
     return (
         <>
-        <h1>Tic-Tac-Toe</h1>
-        <p><em>Mohammed & Keitron collaboration</em></p>
-        <div className="game">
-            <div className="game-board">
-                <Board squares={current.squares} onClick={handleClick} />
-            </div>
-            <div className="game-info">
-                <div>{status}</div>
-                <div>
-                    <button onClick={resetGame}>Reset</button>
+            <h1>Tic-Tac-Toe</h1>
+            <p><em>Mohammed & Keitron collaboration</em></p>
+            <div className="game">
+                <div className="game-board">
+                    <Board squares={current.squares} onClick={handleClick} />
                 </div>
-                <div>
-                    Round: {round} | Player X Score: {xScore} | Player O Score: {oScore}
+                <div className="game-info">
+                    <div>{status}</div>
+                    <div>
+                        <button onClick={resetGame}>Reset</button>
+                    </div>
+                    <div>
+                        Round: {round} | Player X Score: {xScore} | Player O Score: {oScore}
+                    </div>
                 </div>
             </div>
-        </div>
         </>
     );
 }
