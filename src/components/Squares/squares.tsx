@@ -1,9 +1,14 @@
-import React from 'react'
+import React from 'react';
 
-const squares = () => {
-  return (
-    <div>squares</div>
-  )
-}
+type SquareProps = {
+  value: string | null;
+  onClick: () => void;
+};
 
-export default squares
+const Square: React.FC<SquareProps> = ({ value, onClick }) => (
+  <button className="square" onClick={onClick}>
+    {value}
+  </button>
+);
+
+export default Square;
