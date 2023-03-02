@@ -1,6 +1,7 @@
 import React from 'react';
-import Square from '../Squares/Squares';
-import './board.css';
+import Squares from '../Squares/Squares';
+// import Square from '../Squares/Squares';
+import './Board.css';
 
 type BoardProps = {
     squares: Array<string | null>;
@@ -9,7 +10,7 @@ type BoardProps = {
 
 const Board: React.FC<BoardProps> = ({ squares, onClick }) => {
     const renderSquare = (i: number) => (
-        <Square value={squares[i]} onClick={() => onClick(i)} />
+        <Squares value={squares[i]} onClick={() => onClick(i)} />
     );
 
     return (
