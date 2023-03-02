@@ -13,7 +13,6 @@ const Squares: React.FC<SquareProps> = ({ value, onClick }) => (
     </button>
     {/* <div className="square"></div> */}
     </>
-    
 );
 
 export default Squares;

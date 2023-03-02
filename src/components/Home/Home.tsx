@@ -17,32 +17,38 @@ const Home: React.FC<Props> = () => {
     const current = history[stepNumber];
 
     const handleClick = (i: number) => {
-            const newHistory = history.slice(0, stepNumber + 1);
-            const squares = [...current.squares];
+        const newHistory = history.slice(0, stepNumber + 1);
+        const squares = [...current.squares];
 
-            if (calculateWinner(squares) || squares[i]) {
-              return;
-            }
+        if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
 
-            squares[i] = xIsNext ? 'X' : 'O';
+        squares[i] = xIsNext ? 'X' : 'O';
 
-            const newWinner = calculateWinner(squares);
+        const newWinner = calculateWinner(squares);
 
-            setHistory([...newHistory, { squares }]);
-            setStepNumber(newHistory.length);
-            setXIsNext(!xIsNext);
+        setHistory([...newHistory, { squares }]);
+        setStepNumber(newHistory.length);
+        setXIsNext(!xIsNext);
 
-            if (newWinner) {
-              if (newWinner === 'X') {
+        if (newWinner) {
+            if (newWinner === 'X') {
                     setXScore((xScore) => xScore + 1);
-              } else if (newWinner === 'O') {
+                } else if (newWinner === 'O') {
                     setOScore((oScore) => oScore + 1);
-              }
-              setRound((round) => round + 1);
-            } else if (squares.every((square) => square !== null)) {
-              setRound((round) => round + 1);
-            }
-      };
+                }
+                setRound((round) => round + 1);
+                setHistory([{ squares: Array(9).fill(null) }]);
+                setStepNumber(0);
+        } else if (squares.every((square) => square !== null)) {
+                setRound((round) => round + 1);
+                setHistory([{ squares: Array(9).fill(null) }]);
+                setStepNumber(0);
+        }
+    };
+
+    // ===================================================
     const resetGame = () => {
         setHistory([{ squares: Array(9).fill(null) }]);
         setStepNumber(0);
